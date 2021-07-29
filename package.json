@@ -1,0 +1,7 @@
+{
+  "name": "node-tree",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Benjamin Baldivia <goblinlordx@gmail.com>",
+  "license": "MIT"
+}
