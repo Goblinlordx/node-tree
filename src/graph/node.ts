@@ -10,7 +10,7 @@ export type NodeConfig = {
   }
   state?: Record<string, Port>;
   processor: (inputs: Record<string, any>, state: Record<string, any>, outputs: Record<string, Port>) =>
-    [state: Record<string, any>, outputs: Record<string, any>]
+    Record<string, any>
 }
 
 export const processNode = (n: NodeConfig) =>
