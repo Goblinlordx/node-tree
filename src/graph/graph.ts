@@ -1,4 +1,4 @@
-import { NodeConfig } from "./node"
+import { NodeConfig, processNode } from "./node"
 
 export type GraphNode = {
   id: number;
@@ -7,7 +7,7 @@ export type GraphNode = {
   output: Record<string, any>;
 }
 
-export type GraphEdge = [left: string, right: string]
+export type GraphEdge = [from: string, to: string]
 
 export type GraphType = {
 }
@@ -16,18 +16,31 @@ export class Graph {
   private id: number
 
   private nodes: GraphNode[] = []
-  private edges: Record<string, string> = {}
+  private adjacencyList: Record<string, string> = {}
 
-  constructor({ nodes, edges }: { nodes?: GraphNode[], edges?: Record<string, string> }) {
+  constructor({ nodes, edges }: { nodes?: GraphNode[], edges?: GraphEdge[] }) {
     this.nodes = nodes || this.nodes
-    this.edges = edges || this.edges
+    // this.edges = edges || this.edges
+    const validIds = new Set()
+    const invalidId = nodes.some(({id}) => {
+      if (typeof id !== 'string' || validIds.has(id)) return false
+      validIds.add(id)
+    })
+
+    if (invalidId) throw new Error('invalid id detected')
+
     const largest = nodes.map((n) => n.id).reduce((a, n) => a > n ? a : n) || 0
     this.id = largest + 1
   }
 
-  addNode(config: NodeConfig) {
+  async addNode(config: NodeConfig) {
     const id = this.id
     this.id++
-    
+    const node = {id, config, state: {}, output: {}}
+    const output = await processNode(node.config, {})
+    node.output = output
+
+    return node
   }
+
 }

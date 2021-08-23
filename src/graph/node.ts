@@ -9,10 +9,8 @@ export type NodeConfig = {
     output?: Record<string, Port>;
   }
   state?: Record<string, Port>;
-  processor: (inputs: Record<string, any>, state: Record<string, any>, outputs: Record<string, Port>) =>
-    [state: Record<string, any>, outputs: Record<string, any>]
+  processor: (inputs: Record<string, any>, outputs: Record<string, Port>) => Record<string, any> | Promise<Record<string, any>>
 }
 
-export const processNode = (n: NodeConfig) =>
-  (inputs: Record<string, any>, state: Record<string, any>) =>
-    n.processor(inputs, state, n?.ports?.output || {})
+export const processNode = (n: NodeConfig, inputs: Record<string, any>) =>
+    n.processor(inputs, n?.ports?.output || {})
